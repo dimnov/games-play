@@ -7,7 +7,7 @@ export default function Details() {
   const { gameId } = useParams();
 
   useEffect(() => {
-    getOne(gameId).then((game) => setGame(game));
+    getOne(gameId).then(setGame);
   }, [gameId]);
 
   return (
