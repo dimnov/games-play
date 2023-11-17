@@ -2,10 +2,13 @@ import { get, post, put, del } from "../lib/request.js";
 
 const baseUrl = 'http://localhost:3030/jsonstore/comments';
 
-export const getAll = async (gameId,) => {
-  const result = await get(baseUrl);
+export const getAll = async (gameId) => {
+  const query = new URLSearchParams({
+    where: `gameId="${gameId}"`
+  });
 
-  return Object.values(result);
+  const result = await get(baseUrl);
+  return Object.values(result).filter(comment => comment.gameId === gameId);
 }
 
 export const create = async (gameId, username, text) => {
