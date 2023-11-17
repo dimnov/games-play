@@ -15,12 +15,22 @@ const request = async (method, url, data) => {
   const response = await fetch(url, {
     ...buildOptions(data),
     method,
-  })
+  });
 
-  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
 
-  return result;
-}
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    return response.json();
+  } else {
+    // Handle non-JSON responses here if needed
+    // For now, just return the response object
+    console.log(response)
+    return response;
+  }
+};
 
 export const get = request.bind(null, 'GET');
 export const post = request.bind(null, 'POST');
