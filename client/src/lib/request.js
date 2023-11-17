@@ -25,9 +25,6 @@ const request = async (method, url, data) => {
   if (contentType && contentType.includes('application/json')) {
     return response.json();
   } else {
-    // Handle non-JSON responses here if needed
-    // For now, just return the response object
-    console.log(response)
     return response;
   }
 };
