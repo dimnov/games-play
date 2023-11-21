@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import useForm from "../../hooks/useForm.js";
 
-export default function Login() {
-  const { values, onChange, onSubmit } = useForm({
+export default function Login({ loginSubmitHandler }) {
+  const { values, onChange, onSubmit } = useForm(loginSubmitHandler, {
     email: "",
     password: "",
   });
