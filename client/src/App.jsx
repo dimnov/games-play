@@ -1,5 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 
+import * as authService from "./services/authService.js";
+import AuthContext from "./contexts/authContext.js";
+
 import Header from "./components/header/Header.jsx";
 import Home from "./components/home/Home.jsx";
 import Catalog from "./components/catalog/Catalog.jsx";
@@ -8,13 +11,14 @@ import Login from "./components/login/Login.jsx";
 import Register from "./components/register/Register.jsx";
 import Details from "./components/details-game/Details.jsx";
 import { useState } from "react";
-import AuthContext from "./contexts/authContext.js";
 
 function App() {
   const [auth, setAuth] = useState({});
 
-  const loginSubmitHandler = (values) => {
-    console.log(values);
+  const loginSubmitHandler = async ({ email, password }) => {
+    const result = await authService.login(email, password);
+
+    setAuth(result);
   };
 
   const registerSubmitHandler = (values) => {
