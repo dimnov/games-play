@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
 
-export default function Register() {
+const RegisterFormKeys = {
+  Email: "email",
+  Password: "password",
+};
+
+export default function Register({ registerSubmitHandler }) {
+  const { values, onChange, onSubmit } = useForm(registerSubmitHandler, {
+    [RegisterFormKeys.Email]: "",
+    [RegisterFormKeys.Password]: "",
+  });
+
   return (
     <section id="register-page" className="content auth">
       <form id="register">

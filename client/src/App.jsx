@@ -16,6 +16,10 @@ function App() {
     console.log(values);
   };
 
+  const registerSubmitHandler = (values) => {
+    console.log(values);
+  };
+
   return (
     <div id="box">
       <Header />
@@ -28,7 +32,10 @@ function App() {
           path="/login"
           element={<Login loginSubmitHandler={loginSubmitHandler} />}
         />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/register"
+          element={<Register registerSubmitHandler={registerSubmitHandler} />}
+        />
         <Route path="/games/:gameId" element={<Details />} />
       </Routes>
     </div>
