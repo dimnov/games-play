@@ -8,6 +8,7 @@ import Login from "./components/login/Login.jsx";
 import Register from "./components/register/Register.jsx";
 import Details from "./components/details-game/Details.jsx";
 import { useState } from "react";
+import AuthContext from "./contexts/authContext.js";
 
 function App() {
   const [auth, setAuth] = useState({});
@@ -21,24 +22,23 @@ function App() {
   };
 
   return (
-    <div id="box">
-      <Header />
+    <AuthContext.Provider value={{ loginSubmitHandler }}>
+      <div id="box">
+        <Header />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/games" element={<Catalog />} />
-        <Route path="/games/create" element={<CreateGame />} />
-        <Route
-          path="/login"
-          element={<Login loginSubmitHandler={loginSubmitHandler} />}
-        />
-        <Route
-          path="/register"
-          element={<Register registerSubmitHandler={registerSubmitHandler} />}
-        />
-        <Route path="/games/:gameId" element={<Details />} />
-      </Routes>
-    </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/games" element={<Catalog />} />
+          <Route path="/games/create" element={<CreateGame />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/register"
+            element={<Register registerSubmitHandler={registerSubmitHandler} />}
+          />
+          <Route path="/games/:gameId" element={<Details />} />
+        </Routes>
+      </div>
+    </AuthContext.Provider>
   );
 }
 
