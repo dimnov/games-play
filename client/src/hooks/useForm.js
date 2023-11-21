@@ -9,8 +9,16 @@ export default function useForm(submitHandler, initialValues) {
       [e.target.name]: e.target.value,
     }))
   }
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    submitHandler(values);
+  }
+
   return {
     values,
     onChange,
+    onSubmit
   }
 }
