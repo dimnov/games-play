@@ -1,7 +1,9 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import * as authService from "./services/authService.js";
 import AuthContext from "./contexts/authContext.js";
+import Path from "./paths.js";
 
 import Header from "./components/header/Header.jsx";
 import Home from "./components/home/Home.jsx";
@@ -10,8 +12,6 @@ import CreateGame from "./components/create-game/CreateGame.jsx";
 import Login from "./components/login/Login.jsx";
 import Register from "./components/register/Register.jsx";
 import Details from "./components/details-game/Details.jsx";
-import { useState } from "react";
-import Path from "./paths.js";
 
 function App() {
   const navigate = useNavigate();
@@ -35,15 +35,15 @@ function App() {
         <Header />
 
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/games" element={<Catalog />} />
-          <Route path="/games/create" element={<CreateGame />} />
-          <Route path="/login" element={<Login />} />
+          <Route path={Path.Home} element={<Home />} />
+          <Route path={Path.Games} element={<Catalog />} />
+          <Route path={Path.Create} element={<CreateGame />} />
+          <Route path={Path.Login} element={<Login />} />
           <Route
-            path="/register"
+            path={Path.Register}
             element={<Register registerSubmitHandler={registerSubmitHandler} />}
           />
-          <Route path="/games/:gameId" element={<Details />} />
+          <Route path={Path.Game} element={<Details />} />
         </Routes>
       </div>
     </AuthContext.Provider>

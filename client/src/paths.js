@@ -1,7 +1,10 @@
 const Path = {
   Home: '/',
   Games: '/games',
-  Create: '/create',
+  Game: '/games/:gameId',
+  Create: '/games/create',
+  Login: '/login',
+  Register: '/register',
 }
 
 export default Path;
