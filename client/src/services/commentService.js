@@ -1,18 +1,18 @@
-import { get, post, put, del } from "../lib/request.js";
+import * as request from '../lib/request.js';
 
-const baseUrl = 'http://localhost:3030/jsonstore/comments';
+const baseUrl = 'http://localhost:3030/data/comments';
 
 export const getAll = async (gameId) => {
   const query = new URLSearchParams({
     where: `gameId="${gameId}"`
   });
 
-  const result = await get(baseUrl);
-  return Object.values(result).filter(comment => comment.gameId === gameId);
+  const result = await request.get(`${baseUrl}?${query}`);
+  return result;
 }
 
 export const create = async (gameId, username, text) => {
-  const newComment = await post(baseUrl, {
+  const newComment = await request.post(baseUrl, {
     gameId,
     username,
     text
