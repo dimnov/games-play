@@ -17,16 +17,11 @@ const request = async (method, url, data) => {
     method,
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
+  if (!response.status === 204) {
+    return {};
   }
 
-  const contentType = response.headers.get('content-type');
-  if (contentType && contentType.includes('application/json')) {
-    return response.json();
-  } else {
-    return response;
-  }
+  return await response.json();
 };
 
 export const get = request.bind(null, 'GET');
