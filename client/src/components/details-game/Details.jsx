@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 import * as gameService from "../../services/gameService.js";
 import * as commentService from "../../services/commentService.js";
-import AuthContext from "../../contexts/authContext.js";
+import AuthContext from "../../contexts/authContext.jsx";
 
 export default function Details() {
   const { email } = useContext(AuthContext);
