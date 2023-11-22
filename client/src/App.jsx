@@ -16,22 +16,29 @@ import Logout from "./components/logout/logout.jsx";
 
 function App() {
   const navigate = useNavigate();
-  const [auth, setAuth] = useState({});
+  const [auth, setAuth] = useState(() => {
+    localStorage.removeItem("accessToken");
+
+    return {};
+  });
 
   const loginSubmitHandler = async ({ email, password }) => {
     const result = await authService.login(email, password);
     setAuth(result);
+    localStorage.setItem("accessToken", result.accessToken);
     navigate(Path.Home);
   };
 
   const registerSubmitHandler = async (values) => {
     const result = await authService.register(values.email, values.password);
     setAuth(result);
+    localStorage.setItem("accessToken", result.accessToken);
     navigate(Path.Home);
   };
 
   const logoutHandler = async () => {
     setAuth({});
+    localStorage.removeItem("accessToken");
     navigate(Path.Home);
   };
 
@@ -55,10 +62,7 @@ function App() {
           <Route path={Path.Create} element={<CreateGame />} />
           <Route path={Path.Login} element={<Login />} />
           <Route path={Path.Logout} element={<Logout />} />
-          <Route
-            path={Path.Register}
-            element={<Register registerSubmitHandler={registerSubmitHandler} />}
-          />
+          <Route path={Path.Register} element={<Register />} />
           <Route path={Path.Game} element={<Details />} />
         </Routes>
       </div>
