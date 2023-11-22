@@ -6,11 +6,11 @@ import * as commentService from "../../services/commentService.js";
 import AuthContext from "../../contexts/authContext.js";
 
 export default function Details() {
+  const { email } = useContext(AuthContext);
   const [game, setGame] = useState([]);
   const [comments, setComments] = useState([]);
   const { gameId } = useParams();
   const { isAuthenticated } = useContext(AuthContext);
-
   useEffect(() => {
     gameService.getOne(gameId).then(setGame);
     commentService.getAll(gameId).then(setComments);
@@ -23,10 +23,11 @@ export default function Details() {
 
     const newComment = await commentService.create(
       gameId,
-      formData.get("username"),
       formData.get("comment")
     );
-    setComments((state) => [...state, newComment]);
+
+    setComments((state) => [...state, { ...newComment, owner: { email } }]);
+    console.log(comments);
   };
 
   return (
@@ -45,10 +46,10 @@ export default function Details() {
         <div className="details-comments">
           <h2>Comments:</h2>
           <ul>
-            {comments.map(({ _id, username, text }) => (
+            {comments.map(({ _id, text, owner: { email } }) => (
               <li key={_id} className="comment">
                 <p>
-                  {username}: {text}
+                  {email}: {text}
                 </p>
               </li>
             ))}
@@ -70,13 +71,10 @@ export default function Details() {
         </div> */}
       </div>
 
-      {/* <!-- Bonus --> */}
-      {/* <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) --> */}
       {isAuthenticated ? (
         <article className="create-comment">
           <label>Add new comment:</label>
           <form className="form" onSubmit={addCommentHandler}>
-            <input type="text" name="username" placeholder="username" />
             <textarea name="comment" placeholder="Comment......"></textarea>
             <input className="btn submit" type="submit" value="Add Comment" />
           </form>
