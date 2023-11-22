@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import useForm from "../../hooks/useForm.js";
+import { useContext } from "react";
+import AuthContext from "../../contexts/authContext.js";
 
 const RegisterFormKeys = {
   Email: "email",
@@ -7,10 +9,12 @@ const RegisterFormKeys = {
   ConfirmPassword: "confirm-password",
 };
 
-export default function Register({ registerSubmitHandler }) {
+export default function Register() {
+  const { registerSubmitHandler } = useContext(AuthContext);
   const { values, onChange, onSubmit } = useForm(registerSubmitHandler, {
     [RegisterFormKeys.Email]: "",
     [RegisterFormKeys.Password]: "",
+    [RegisterFormKeys.ConfirmPassword]: "",
   });
 
   return (
