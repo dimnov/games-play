@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import * as authService from "./services/authService.js";
 import AuthContext from "./contexts/authContext.js";
@@ -11,14 +11,18 @@ import Login from "./components/login/Login.jsx";
 import Register from "./components/register/Register.jsx";
 import Details from "./components/details-game/Details.jsx";
 import { useState } from "react";
+import Path from "./paths.js";
 
 function App() {
+  const navigate = useNavigate();
   const [auth, setAuth] = useState({});
 
   const loginSubmitHandler = async ({ email, password }) => {
     const result = await authService.login(email, password);
 
     setAuth(result);
+
+    navigate(Path.Home);
   };
 
   const registerSubmitHandler = (values) => {
