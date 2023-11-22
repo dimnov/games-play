@@ -29,17 +29,16 @@ function App() {
     navigate(Path.Home);
   };
 
-  const registerSubmitHandler = async (values) => {
-    const result = await authService.register(values.email, values.password);
+  const registerSubmitHandler = async ({ email, password }) => {
+    const result = await authService.register(email, password);
     setAuth(result);
     localStorage.setItem("accessToken", result.accessToken);
     navigate(Path.Home);
   };
 
-  const logoutHandler = async () => {
+  const logoutHandler = () => {
     setAuth({});
     localStorage.removeItem("accessToken");
-    navigate(Path.Home);
   };
 
   const values = {
@@ -59,11 +58,11 @@ function App() {
         <Routes>
           <Route path={Path.Home} element={<Home />} />
           <Route path={Path.Games} element={<Catalog />} />
+          <Route path={Path.Game} element={<Details />} />
           <Route path={Path.Create} element={<CreateGame />} />
           <Route path={Path.Login} element={<Login />} />
-          <Route path={Path.Logout} element={<Logout />} />
           <Route path={Path.Register} element={<Register />} />
-          <Route path={Path.Game} element={<Details />} />
+          <Route path={Path.Logout} element={<Logout />} />
         </Routes>
       </div>
     </AuthContext.Provider>

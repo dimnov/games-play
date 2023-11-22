@@ -27,7 +27,6 @@ export default function Details() {
     );
 
     setComments((state) => [...state, { ...newComment, owner: { email } }]);
-    console.log(comments);
   };
 
   return (

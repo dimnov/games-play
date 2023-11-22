@@ -1,4 +1,5 @@
 import { useContext, useEffect } from "react";
+
 import * as authService from "../../services/authService.js";
 import { useNavigate } from "react-router-dom";
 import Path from "../../paths.js";
@@ -10,7 +11,10 @@ export default function Logout() {
   useEffect(() => {
     authService
       .logout()
-      .then(() => logoutHandler())
+      .then(() => {
+        logoutHandler();
+        navigate(Path.Home);
+      })
       .catch(() => navigate(Path.Home));
   }, []);
 
