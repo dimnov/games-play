@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import * as gameService from "../../services/gameService.js";
 import * as commentService from "../../services/commentService.js";
+import AuthContext from "../../contexts/authContext.js";
 
 export default function Details() {
   const [game, setGame] = useState([]);
   const [comments, setComments] = useState([]);
   const { gameId } = useParams();
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     gameService.getOne(gameId).then(setGame);
@@ -24,8 +26,7 @@ export default function Details() {
       formData.get("username"),
       formData.get("comment")
     );
-
-    setComments((state) => [...comments, newComment]);
+    setComments((state) => [...state, newComment]);
   };
 
   return (
@@ -41,11 +42,9 @@ export default function Details() {
 
         <p className="text">{game.summary}</p>
 
-        {/* <!-- Bonus ( for Guests and Users ) --> */}
         <div className="details-comments">
           <h2>Comments:</h2>
           <ul>
-            {/* <!-- list all comments for current game (If any) --> */}
             {comments.map(({ _id, username, text }) => (
               <li key={_id} className="comment">
                 <p>
@@ -58,7 +57,6 @@ export default function Details() {
           {comments.length === 0 ? (
             <p className="no-comment">No comments.</p>
           ) : null}
-          {/* <!-- Display paragraph: If there are no games in the database --> */}
         </div>
 
         {/* <!-- Edit/Delete buttons ( Only for creator of this game )  --> */}
@@ -74,14 +72,16 @@ export default function Details() {
 
       {/* <!-- Bonus --> */}
       {/* <!-- Add Comment ( Only for logged-in users, which is not creators of the current game ) --> */}
-      <article className="create-comment">
-        <label>Add new comment:</label>
-        <form className="form" onSubmit={addCommentHandler}>
-          <input type="text" name="username" placeholder="username" />
-          <textarea name="comment" placeholder="Comment......"></textarea>
-          <input className="btn submit" type="submit" value="Add Comment" />
-        </form>
-      </article>
+      {isAuthenticated ? (
+        <article className="create-comment">
+          <label>Add new comment:</label>
+          <form className="form" onSubmit={addCommentHandler}>
+            <input type="text" name="username" placeholder="username" />
+            <textarea name="comment" placeholder="Comment......"></textarea>
+            <input className="btn submit" type="submit" value="Add Comment" />
+          </form>
+        </article>
+      ) : null}
     </section>
   );
 }
