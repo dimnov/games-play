@@ -5,13 +5,13 @@ import * as gameService from "../../services/gameService.js";
 import * as commentService from "../../services/commentService.js";
 import AuthContext from "../../contexts/authContext.jsx";
 import reducer from "./commentReducer.js";
+import useForm from "../../hooks/useForm.js";
 
 export default function Details() {
   const { email } = useContext(AuthContext);
   const [game, setGame] = useState({});
   const [comments, dispatch] = useReducer(reducer, []);
   const { gameId } = useParams();
-  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     gameService.getOne(gameId).then(setGame);
@@ -23,15 +23,8 @@ export default function Details() {
     });
   }, [gameId]);
 
-  const addCommentHandler = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-
-    const newComment = await commentService.create(
-      gameId,
-      formData.get("comment")
-    );
+  const addCommentHandler = async (values) => {
+    const newComment = await commentService.create(gameId, values.comment);
 
     newComment.owner = { email };
 
@@ -40,6 +33,10 @@ export default function Details() {
       payload: newComment,
     });
   };
+
+  const { values, onChange, onSubmit } = useForm(addCommentHandler, {
+    comment: "",
+  });
   return (
     <section id="game-details">
       <h1>Game Details</h1>
@@ -81,15 +78,20 @@ export default function Details() {
         </div> */}
       </div>
 
-      {isAuthenticated ? (
-        <article className="create-comment">
-          <label>Add new comment:</label>
-          <form className="form" onSubmit={addCommentHandler}>
-            <textarea name="comment" placeholder="Comment......"></textarea>
-            <input className="btn submit" type="submit" value="Add Comment" />
-          </form>
-        </article>
-      ) : null}
+      {/* {isAuthenticated ? ( */}
+      <article className="create-comment">
+        <label>Add new comment:</label>
+        <form className="form" onSubmit={onSubmit}>
+          <textarea
+            name="comment"
+            value={values.comment}
+            onChange={onChange}
+            placeholder="Comment......"
+          ></textarea>
+          <input className="btn submit" type="submit" value="Add Comment" />
+        </form>
+      </article>
+      {/* ) : null} */}
     </section>
   );
 }
