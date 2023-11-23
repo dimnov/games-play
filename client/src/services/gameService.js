@@ -18,3 +18,9 @@ export const create = async (title, category, maxLevel, imageUrl, summary) => {
 
   return result;
 }
+
+export const edit = async (gameId, title, category, maxLevel, imageUrl, summary) => {
+  const result = await request.put(`${baseUrl}/${gameId}`, title, category, maxLevel, imageUrl, summary);
+
+  return result;
+}

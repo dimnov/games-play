@@ -1,11 +1,13 @@
-import { useContext, useEffect, useReducer, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useMemo, useReducer, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 import * as gameService from "../../services/gameService.js";
 import * as commentService from "../../services/commentService.js";
 import AuthContext from "../../contexts/authContext.jsx";
 import reducer from "./commentReducer.js";
 import useForm from "../../hooks/useForm.js";
+import Path from "../../paths.js";
+import { pathToUrl } from "../../utils/pathUtils.js";
 
 export default function Details() {
   const { email, userId, isAuthenticated } = useContext(AuthContext);
@@ -34,9 +36,17 @@ export default function Details() {
     });
   };
 
-  const { values, onChange, onSubmit } = useForm(addCommentHandler, {
-    comment: "",
-  });
+  const initialValues = useMemo(
+    () => ({
+      comment: "",
+    }),
+    []
+  );
+
+  const { values, onChange, onSubmit } = useForm(
+    addCommentHandler,
+    initialValues
+  );
 
   return (
     <section id="game-details">
@@ -70,12 +80,12 @@ export default function Details() {
 
         {userId === game._ownerId ? (
           <div className="buttons">
-            <a href="#" className="button">
+            <Link to={pathToUrl(Path.Edit, { gameId })} className="button">
               Edit
-            </a>
-            <a href="#" className="button">
+            </Link>
+            <Link to="#" className="button">
               Delete
-            </a>
+            </Link>
           </div>
         ) : null}
       </div>

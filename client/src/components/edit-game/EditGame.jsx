@@ -21,9 +21,9 @@ export default function EditGame() {
 
   const editGameSubmitHandler = async (values) => {
     try {
-      await gameService.edit(values);
+      await gameService.edit(gameId, values);
 
-      navigate(Path.Game);
+      navigate(Path.Games);
     } catch (error) {
       console.log(error);
     }
