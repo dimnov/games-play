@@ -8,7 +8,7 @@ import reducer from "./commentReducer.js";
 import useForm from "../../hooks/useForm.js";
 
 export default function Details() {
-  const { email } = useContext(AuthContext);
+  const { email, userId, isAuthenticated } = useContext(AuthContext);
   const [game, setGame] = useState({});
   const [comments, dispatch] = useReducer(reducer, []);
   const { gameId } = useParams();
@@ -37,6 +37,7 @@ export default function Details() {
   const { values, onChange, onSubmit } = useForm(addCommentHandler, {
     comment: "",
   });
+
   return (
     <section id="game-details">
       <h1>Game Details</h1>
@@ -67,31 +68,32 @@ export default function Details() {
           </ul>
         </div>
 
-        {/* <!-- Edit/Delete buttons ( Only for creator of this game )  --> */}
-        {/* <div className="buttons">
-          <a href="#" className="button">
-            Edit
-          </a>
-          <a href="#" className="button">
-            Delete
-          </a>
-        </div> */}
+        {userId === game._ownerId ? (
+          <div className="buttons">
+            <a href="#" className="button">
+              Edit
+            </a>
+            <a href="#" className="button">
+              Delete
+            </a>
+          </div>
+        ) : null}
       </div>
 
-      {/* {isAuthenticated ? ( */}
-      <article className="create-comment">
-        <label>Add new comment:</label>
-        <form className="form" onSubmit={onSubmit}>
-          <textarea
-            name="comment"
-            value={values.comment}
-            onChange={onChange}
-            placeholder="Comment......"
-          ></textarea>
-          <input className="btn submit" type="submit" value="Add Comment" />
-        </form>
-      </article>
-      {/* ) : null} */}
+      {isAuthenticated ? (
+        <article className="create-comment">
+          <label>Add new comment:</label>
+          <form className="form" onSubmit={onSubmit}>
+            <textarea
+              name="comment"
+              value={values.comment}
+              onChange={onChange}
+              placeholder="Comment......"
+            ></textarea>
+            <input className="btn submit" type="submit" value="Add Comment" />
+          </form>
+        </article>
+      ) : null}
     </section>
   );
 }
