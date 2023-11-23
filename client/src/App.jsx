@@ -11,6 +11,7 @@ import Login from "./components/login/Login.jsx";
 import Register from "./components/register/Register.jsx";
 import Details from "./components/details-game/Details.jsx";
 import Logout from "./components/logout/logout.jsx";
+import EditGame from "./components/edit-game/EditGame.jsx";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path={Path.Games} element={<Catalog />} />
           <Route path={Path.Game} element={<Details />} />
           <Route path={Path.Create} element={<CreateGame />} />
+          <Route path={Path.Edit} element={<EditGame />} />
           <Route path={Path.Login} element={<Login />} />
           <Route path={Path.Register} element={<Register />} />
           <Route path={Path.Logout} element={<Logout />} />
