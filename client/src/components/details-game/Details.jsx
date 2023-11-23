@@ -1,19 +1,26 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import * as gameService from "../../services/gameService.js";
 import * as commentService from "../../services/commentService.js";
 import AuthContext from "../../contexts/authContext.jsx";
+import reducer from "./commentReducer.js";
 
 export default function Details() {
   const { email } = useContext(AuthContext);
-  const [game, setGame] = useState([]);
-  const [comments, setComments] = useState([]);
+  const [game, setGame] = useState({});
+  const [comments, dispatch] = useReducer(reducer, []);
   const { gameId } = useParams();
   const { isAuthenticated } = useContext(AuthContext);
+
   useEffect(() => {
     gameService.getOne(gameId).then(setGame);
-    commentService.getAll(gameId).then(setComments);
+    commentService.getAll(gameId).then((result) => {
+      dispatch({
+        type: "GET_ALL_COMMENTS",
+        payload: result,
+      });
+    });
   }, [gameId]);
 
   const addCommentHandler = async (e) => {
@@ -26,9 +33,13 @@ export default function Details() {
       formData.get("comment")
     );
 
-    setComments((state) => [...state, { ...newComment, owner: { email } }]);
-  };
+    newComment.owner = { email };
 
+    dispatch({
+      type: "ADD_COMMENT",
+      payload: newComment,
+    });
+  };
   return (
     <section id="game-details">
       <h1>Game Details</h1>
@@ -45,18 +56,18 @@ export default function Details() {
         <div className="details-comments">
           <h2>Comments:</h2>
           <ul>
-            {comments.map(({ _id, text, owner: { email } }) => (
-              <li key={_id} className="comment">
-                <p>
-                  {email}: {text}
-                </p>
-              </li>
-            ))}
+            {comments?.length ? (
+              comments.map(({ _id, text, owner: { email } }) => (
+                <li key={_id} className="comment">
+                  <p>
+                    {email}: {text}
+                  </p>
+                </li>
+              ))
+            ) : (
+              <p className="no-comment">No comments.</p>
+            )}
           </ul>
-
-          {comments.length === 0 ? (
-            <p className="no-comment">No comments.</p>
-          ) : null}
         </div>
 
         {/* <!-- Edit/Delete buttons ( Only for creator of this game )  --> */}
